@@ -1,9 +1,9 @@
 {
-  "main": "bundles/ng2-file-upload.umd.js",
+  "main": "dist/bundles/ng2-file-upload.umd.js",
   "version": "1.2.1",
   "description": "Angular file upload directives",
-  "module": "index.js",
-  "typings": "index.d.ts",
+  "module": "dist/index.js",
+  "typings": "dist/index.d.ts",
   "keywords": [
     "angular2",
     "bootstrap",
