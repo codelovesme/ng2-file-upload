@@ -4,6 +4,27 @@ import { FileUploader } from './file-uploader.class';
 
 @Directive({ selector: '[ng2FileSelect]' })
 export class FileSelectDirective {
+
+  /**
+   * Headers getter setter
+   */
+  private _headers: { name: string, value: string }[];
+  private _assignHeadersLater: boolean;
+  @Input() public set overrideHeaders(val) {
+    this._headers = val;
+    if (this.uploader) {
+      this.uploader.options.headers = val;
+    } else {
+      this._assignHeadersLater = true
+    }
+  }
+  public get overrideHeaders() {
+    return this._headers;
+  }
+
+  /**
+   * others
+   */
   @Input() public uploader: FileUploader;
   @Output() public onFileSelected: EventEmitter<File[]> = new EventEmitter<File[]>();
 
@@ -36,6 +57,13 @@ export class FileSelectDirective {
 
     if (this.isEmptyAfterSelection()) {
       this.element.nativeElement.value = '';
+    }
+  }
+
+  ngDoCheck() {
+    if (this._assignHeadersLater && this.uploader) {
+      this.uploader.options.headers = this.overrideHeaders;
+      this._assignHeadersLater = false;
     }
   }
 }

@@ -801,6 +801,22 @@ var FileSelectDirective = (function () {
         this.onFileSelected = new core_1.EventEmitter();
         this.element = element;
     }
+    Object.defineProperty(FileSelectDirective.prototype, "overrideHeaders", {
+        get: function () {
+            return this._headers;
+        },
+        set: function (val) {
+            this._headers = val;
+            if (this.uploader) {
+                this.uploader.options.headers = val;
+            }
+            else {
+                this._assignHeadersLater = true;
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
     FileSelectDirective.prototype.getOptions = function () {
         return this.uploader.options;
     };
@@ -820,8 +836,19 @@ var FileSelectDirective = (function () {
             this.element.nativeElement.value = '';
         }
     };
+    FileSelectDirective.prototype.ngDoCheck = function () {
+        if (this._assignHeadersLater && this.uploader) {
+            this.uploader.options.headers = this.overrideHeaders;
+            this._assignHeadersLater = false;
+        }
+    };
     return FileSelectDirective;
 }());
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Object),
+    __metadata("design:paramtypes", [Object])
+], FileSelectDirective.prototype, "overrideHeaders", null);
 __decorate([
     core_1.Input(),
     __metadata("design:type", file_uploader_class_1.FileUploader)
